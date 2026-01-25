@@ -26,6 +26,7 @@ enum {
     NUMBERS_AND_MATH,
     FUNCTIONS_AND_NUMPAD,
     SHORTCUT_AND_NAVIGATE,
+    SPECIAL,
 };
 
 
@@ -46,6 +47,7 @@ enum custom_keycodes {
 enum tap_dance_events {
     TD_QUOT_DQUO,
     TD_DOT_COLON,
+    TD_SLSH_QUES,
     TD_CCED,
 };
 
@@ -73,6 +75,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 tap_dance_action_t tap_dance_actions[] = {
     [TD_QUOT_DQUO] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
     [TD_DOT_COLON] = ACTION_TAP_DANCE_DOUBLE(KC_DOT, KC_COLN),
+    [TD_SLSH_QUES] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_QUES),
     [TD_CCED] = ACTION_TAP_DANCE_DOUBLE(KC_C, KC_CCED),
 };
 
@@ -106,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|    |--------+--------+--------+--------+--------+--------+--------|
         XXXXXXX,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_TAB,      KC_BSPC,    KC_H,    KC_J,    KC_K,    KC_L, TD(TD_QUOT_DQUO), XXXXXXX,
     //|--------+--------+--------+--------+--------+--------+--------'    '--------+--------+--------+--------+--------+--------+--------|
-        XXXXXXX,    KC_Z,    KC_X,TD(TD_CCED),  KC_V,    KC_B,                      KC_N,    KC_M, KC_COMM, TD(TD_DOT_COLON), KC_SLSH, XXXXXXX,
+    TO(SPECIAL),    KC_Z,    KC_X,TD(TD_CCED),  KC_V,    KC_B,                KC_N,    KC_M, KC_COMM, TD(TD_DOT_COLON), TD(TD_SLSH_QUES), XXXXXXX,
     //'--------+--------+--------+--------+--------+--------+--------,    ,--------+--------+--------+--------+--------+--------+--------'
       TO(NUMBERS_AND_MATH), KC_LGUI, LT(SHORTCUT_AND_NAVIGATE,KC_SPC),        LT(SYMBOLS, KC_ENT), TO(SYMBOLS), TO(FUNCTIONS_AND_NUMPAD)
     ),
@@ -172,7 +175,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //'--------+--------+--------+--------+--------+--------+--------,    ,--------+--------+--------+--------+--------+--------+--------'
                                             XXXXXXX, XXXXXXX, KC_SPC,      KC_ENT, XXXXXXX, XXXXXXX
     ),
-    
+
+    [SPECIAL] = LAYOUT_split_3x6_3_ex2(
+    //,--------------------------------------------------------------,    ,--------------------------------------------------------------,
+       QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_REBOOT,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    //|--------+--------+--------+--------+--------+--------+--------|    |--------+--------+--------+--------+--------+--------+--------|
+        RM_TOGG, RM_HUEU, RM_SATU, RM_VALU, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    //|--------+--------+--------+--------+--------+--------+--------'    '--------+--------+--------+--------+--------+--------+--------|
+        RM_NEXT, RM_HUED, RM_SATD, RM_VALD, XXXXXXX, XXXXXXX,                        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    //'--------+--------+--------+--------+--------+--------+--------,    ,--------+--------+--------+--------+--------+--------+--------'
+                                            XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX
+        
+    ),
 };
 
 #ifdef ENCODER_MAP_ENABLE
@@ -182,5 +196,6 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
   [NUMBERS_AND_MATH] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
   [FUNCTIONS_AND_NUMPAD] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
   [SHORTCUT_AND_NAVIGATE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
+  [SPECIAL] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
 };
 #endif
