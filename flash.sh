@@ -2,74 +2,79 @@
 
 set -e
 
+# Local keymap directory
 KEYMAP_DIR="./keymap"
+
+# QMK firmware directory
 QMK_DIR="$HOME/qmk_firmware"
+
 KEYBOARD="crkbd/rev4_1/standard"
 KEYMAP="fanhenrique"
 
-MOUNT_BASE="/media/$USER"
-MOUNT_POINT="$MOUNT_BASE/rpi-rp2"
+# RPI-RP2 mount point (udisks)
+MOUNT_POINT="/media/$USER/RPI-RP2"
 
-
+# Wait for RPI-RP2 to enter BOOTLOADER (UF2) mode
 wait_for_bootloader() {
-    echo "==> Waiting for RP2040 (RPI-RP2) BOOTLOADER mode (press QK_BOOTLOADER or QK_BOOT)..."
-
-    while true; do
-        DEVICE=$(lsblk -o NAME,SIZE,TRAN,MODEL -nr | awk '$2=="128M" && $3=="usb" && $4=="RP2" {print "/dev/"$1"1"}')
-        echo "$DEVICE"
+    echo "==> Waiting for RPI-RP2 BOOTLOADER mode (press QK_BOOTLOADER or QK_BOOT)..."
+    
+    # Timeout: ~30s
+    for i in {1..300}; do
+        # Detect block device with label RPI-RP2  
+        DEVICE=$(lsblk -nr -o NAME,LABEL | awk '$2=="RPI-RP2" {print "/dev/"$1}')
         [[ -n "$DEVICE" ]] && break
-        sleep 0.5
+        sleep 0.1
     done
-    echo "RP2040 detected in BOOTLOADER mode: $DEVICE"
+
+    # Abort if not detected
+    if [[ -z "$DEVICE" ]]; then
+        echo "ERROR: RPI-RP2 not detected. Press QK_BOOT on the MASTER side."
+        exit 1
+    fi
+
+    echo "RPI-RP2 detected: $DEVICE"
 }
 
+# Wait until RPI-RP2 reboots after flashing
 wait_for_reboot() {
-    echo "==> Waiting for RP2040 to reboot..."
-
-    while true; do
-        if ! lsblk -o LABEL -nr | grep -q "RPI-RP2"; then
-            break
-        fi
+    echo "==> Waiting for RPI-RP2 to reboot..."
+    while lsblk -nr -o LABEL | grep -q RPI-RP2; do
         sleep 0.3
     done
-
-    echo "RP2040 reboot"
+    echo "RPI-RP2 rebooted"
 }
 
-
+# Copy custom keymap into QMK tree
 echo "==> Copying keymap files..."
 cp -r "$KEYMAP_DIR"/* "$QMK_DIR/keyboards/crkbd/keymaps/$KEYMAP"
 
+# Compile firmware
 echo "==> Compiling QMK firmware..."
-if ! qmk compile --keyboard "$KEYBOARD" --keymap "$KEYMAP" > /dev/null; then
+if ! qmk compile --keyboard "$KEYBOARD" --keymap "$KEYMAP"; then
     echo "ERROR: QMK compilation failed"
     exit 1
 fi
 
 wait_for_bootloader
 
-# echo "==> Flashing QMK firmware..."
-# if ! qmk flash --keyboard "$KEYBOARD" --keymap "$KEYMAP" > /dev/null; then
-#     echo "ERROR: QMK flashing failed"
-#     exit 1
-# fi
-
-echo "==> Creating mount point..."
-sudo mkdir -p "$MOUNT_POINT"
-
-
+# Mount RPI-RP2
 echo "==> Mounting device..."
-sudo mount -o uid=$(id -u),gid=$(id -g) "$DEVICE" "$MOUNT_POINT"
+udisksctl mount -b "$DEVICE" >/dev/null 2>&1 || true
+while [ ! -d "$MOUNT_POINT" ]; do
+    sleep 0.1
+done
+echo "Mounted at $MOUNT_POINT"
 
-
+# Flash UF2 firmware
 KB_SAFE="${KEYBOARD//\//_}"
 UF2="$QMK_DIR/${KB_SAFE}_${KEYMAP}.uf2"
 echo "==> Flashing firmware: $UF2"
 cp "$UF2" "$MOUNT_POINT/"
 
-wait_for_reboot
+# Write on the disc (RPI-RP2)
+# Ensure data is fully written
+sync
 
-# echo "==> Unmounting device..."
-# sudo umount "$MOUNT_POINT"
+wait_for_reboot
 
 echo "Flash completed (device will reboot automatically)"
