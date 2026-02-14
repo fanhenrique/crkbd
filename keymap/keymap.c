@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-#define COMBO_MUST_TAP_PER_COMBO
+
 
 // ### Layers ###
 enum {
@@ -36,17 +36,16 @@ enum combo_events {
     COMBO_SEMICOLON,
 };
 
-// ### Custom keys ###
+// // ### Custom keys ###
 enum custom_keycodes {
     KC_CCED = SAFE_RANGE,
 };
 
 // ### Tap dance (double click) ###
 enum tap_dance_events {
-    TD_QUOT_DQUO,
+    TD_DQUO_QUOT,
     TD_DOT_COLON,
     TD_SLSH_QUES,
-    TD_CCED,
 };
 
 const uint16_t PROGMEM semicolon_combo[] = { KC_COMM, KC_DOT, COMBO_END };
@@ -55,23 +54,24 @@ combo_t key_combos[] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    
+
     if (!record->event.pressed) return true;
 
     switch (keycode) {
         case KC_CCED:
-            tap_code(KC_QUOT); // '
-            tap_code(KC_C);    // c
-            return false;
+            if (record->event.pressed) {
+            tap_code16(RALT(KC_COMM)); 
+            tap_code(KC_C); 
+            }
+        return false;
     }
     return true;
 }
 
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_QUOT_DQUO] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
+    [TD_DQUO_QUOT] = ACTION_TAP_DANCE_DOUBLE(KC_DQUO, KC_QUOT),
     [TD_DOT_COLON] = ACTION_TAP_DANCE_DOUBLE(KC_DOT, KC_COLN),
     [TD_SLSH_QUES] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_QUES),
-    [TD_CCED] = ACTION_TAP_DANCE_DOUBLE(KC_C, KC_CCED),
 };
 
 // //,--------------------------------------------------------------,    ,--------------------------------------------------------------,
@@ -97,12 +97,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,--------------------------------------------------------------,    ,--------------------------------------------------------------,
         KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,  KC_CAPS,      KC_DEL,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,
     //|--------+--------+--------+--------+--------+--------+--------|    |--------+--------+--------+--------+--------+--------+--------|
-        KC_TAB,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_LCTL,      KC_LALT,  KC_H,  KC_J,  KC_K,  KC_L, TD(TD_QUOT_DQUO), KC_DEL,
+        KC_TAB,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_LCTL,      KC_LALT,  KC_H,  KC_J,  KC_K,  KC_L, TD(TD_DQUO_QUOT), KC_DEL,
     //|--------+--------+--------+--------+--------+--------+--------'    '--------+--------+--------+--------+--------+--------+--------|
-        KC_LSFT,    KC_Z,    KC_X,TD(TD_CCED),  KC_V,    KC_B,              KC_N,KC_M,KC_COMM, TD(TD_DOT_COLON),TD(TD_SLSH_QUES),MO(SPECIAL),
+        KC_LSFT,    KC_Z,    KC_X,   KC_C,  KC_V,    KC_B,              KC_N,KC_M,KC_COMM, TD(TD_DOT_COLON),TD(TD_SLSH_QUES),MO(SPECIAL),
     //'--------+--------+--------+--------+--------+--------+--------,    ,--------+--------+--------+--------+--------+--------+--------'
-                MO(SYMBOLS), LM(OS, MOD_LGUI), LT(SHORTCUT,KC_SPC),              KC_ENT, MO(NAVIGATE), MO(NUMBERS_AND_MATH)
-    ),
+                MO(SHORTCUT), LM(OS, MOD_LGUI), LT(SYMBOLS, KC_SPC),              KC_ENT, MO(NAVIGATE), MO(NUMBERS_AND_MATH)
+    ), 
 
     [OS] = LAYOUT_split_3x6_3_ex2(
     //,--------------------------------------------------------------,    ,--------------------------------------------------------------,
@@ -154,7 +154,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|    |--------+--------+--------+--------+--------+--------+--------|
         XXXXXXX, XXXXXXX,  KC_DLR, KC_COLN, KC_QUOT,  KC_GRV, XXXXXXX,      XXXXXXX, KC_UNDS, KC_LBRC, KC_RBRC, KC_DQUO, KC_QUOT, XXXXXXX,
     //|--------+--------+--------+--------+--------+--------+--------'    '--------+--------+--------+--------+--------+--------+--------|
-        XXXXXXX, XXXXXXX, XXXXXXX, KC_AMPR, KC_PIPE, KC_EXLM,                        XXXXXXX,  KC_LCBR, KC_RCBR, KC_SLSH, KC_NUBS,TO(TEXT),
+        XXXXXXX, XXXXXXX, KC_AMPR, KC_CCED, KC_PIPE, KC_EXLM,                        XXXXXXX,  KC_LCBR, KC_RCBR, KC_SLSH, KC_NUBS,TO(TEXT),
     //'--------+--------+--------+--------+--------+--------+--------,    ,--------+--------+--------+--------+--------+--------+--------'
                                             XXXXXXX, XXXXXXX,  XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX
     ),
