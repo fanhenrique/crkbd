@@ -16,7 +16,7 @@ MOUNT_POINT="/media/$USER/RPI-RP2"
 
 # Wait for RPI-RP2 to enter BOOTLOADER (UF2) mode
 wait_for_bootloader() {
-    echo "==> Waiting for RPI-RP2 BOOTLOADER mode (press QK_BOOTLOADER or QK_BOOT)..."
+    printf "\n==> Waiting for RPI-RP2 to enter BOOTLOADER mode (press QK_BOOTLOADER or QK_BOOT)...\n"
     
     # Timeout: ~30s
     for i in {1..300}; do
@@ -28,48 +28,59 @@ wait_for_bootloader() {
 
     # Abort if not detected
     if [[ -z "$DEVICE" ]]; then
-        echo "ERROR: RPI-RP2 not detected. Press QK_BOOT on the MASTER side."
+        printf "\n==> ERROR: RPI-RP2 not detected. Press QK_BOOT on the master side.\n"
         exit 1
     fi
 
-    echo "RPI-RP2 detected: $DEVICE"
+    printf "\n==> RPI-RP2 detected: %s\n" "$DEVICE"
 }
 
 # Wait until RPI-RP2 reboots after flashing
 wait_for_reboot() {
-    echo "==> Waiting for RPI-RP2 to reboot..."
-    while lsblk -nr -o LABEL | grep -q RPI-RP2; do
+    printf "\n==> Waiting for RPI-RP2 to reboot...\n"
+    while lsblk -nr -o LABEL | grep -q "^RPI-RP2$"; do
         sleep 0.3
     done
-    echo "RPI-RP2 rebooted"
+    printf "\n==> RPI-RP2 has rebooted!\n"
 }
 
 # Copy custom keymap into QMK tree
-echo "==> Copying keymap files..."
-cp -r "$KEYMAP_DIR"/* "$QMK_DIR/keyboards/crkbd/keymaps/$KEYMAP"
-
-# Compile firmware
-echo "==> Compiling QMK firmware..."
-if ! qmk compile --keyboard "$KEYBOARD" --keymap "$KEYMAP"; then
-    echo "ERROR: QMK compilation failed"
+printf "\n==> Copying keymap files...\n"
+if ! cp -r "$KEYMAP_DIR"/. "$QMK_DIR/keyboards/crkbd/keymaps/$KEYMAP"; then
+    printf "\n==> ERROR: Failed to copy keymap files.\n"
     exit 1
 fi
+
+# Compile firmware
+printf "\n==> Compiling QMK firmware...\n\n"
+if ! qmk compile --keyboard "$KEYBOARD" --keymap "$KEYMAP" > /dev/null; then
+    printf "\n==> ERROR: QMK compilation failed\n"
+    exit 1
+fi
+printf "\n==> Compilation successful!\n"
 
 wait_for_bootloader
 
 # Mount RPI-RP2
-echo "==> Mounting device..."
-udisksctl mount -b "$DEVICE" >/dev/null 2>&1 || true
+printf "\n==> Mounting device...\n"
+if ! udisksctl mount -b "$DEVICE" > /dev/null; then
+    printf "\n==> ERROR: Mount operation failed for device %s\n" "$DEVICE"
+    exit 1
+fi
 while [ ! -d "$MOUNT_POINT" ]; do
     sleep 0.1
 done
-echo "Mounted at $MOUNT_POINT"
+printf "\n==> Mounted at %s\n" "$MOUNT_POINT"
 
 # Flash UF2 firmware
 KB_SAFE="${KEYBOARD//\//_}"
 UF2="$QMK_DIR/${KB_SAFE}_${KEYMAP}.uf2"
-echo "==> Flashing firmware: $UF2"
-cp "$UF2" "$MOUNT_POINT/"
+
+printf "\n==> Flashing firmware: %s\n" "$UF2"
+if ! cp "$UF2" "$MOUNT_POINT/"; then
+    printf "\n==> ERROR: Failed to copy firmware file %s\n" "$UF2"
+    exit 1
+fi
 
 # Write on the disc (RPI-RP2)
 # Ensure data is fully written
@@ -77,4 +88,4 @@ sync
 
 wait_for_reboot
 
-echo "Flash completed (device will reboot automatically)"
+printf "\n==> Flash completed. The device will reboot automatically.\n"
