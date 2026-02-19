@@ -1,5 +1,49 @@
 # Corne Keyboard (CRKBD)
 
+## Keyboard Layout (OS Configuration)
+
+This keymap assumes the use of the International keyboard layout at the operating system level (e.g. US International or International (AltGr dead keys)).
+
+Using a different keyboard layout may result in incorrect characters.
+
+### Debian / Ubuntu / Derivatives
+
+Generate the [`keyboard`](./keyboard) configuration file using the standard Debian tool and select an international keyboard layout when prompted:
+
+```bash
+sudo dpkg-reconfigure keyboard-configuration
+sudo service keyboard-setup restart
+```
+
+Alternatively, you can copy the provided [`keyboard`](./keyboard) file directly to `/etc/default/` and restart the service:
+
+```bash
+sudo cp keyboard /etc/default/keyboard
+sudo service keyboard-setup restart
+```
+
+Important: Make sure the selected layout is an international standard layout to match the keymap.
+
+> See the Debian Wiki for more information: https://wiki.debian.org/Keyboard
+
+### Remap keys
+
+Change this line in `/usr/share/X11/xkb/symbols/us` file.
+
+```bash
+# remove
+key <AC11> { [ dead_acute, dead_diaeresis, apostrophe, quotedbl ] };
+
+# add
+key <AC11> { [ apostrophe,  quotedbl, dead_acute, dead_diaeresis ] };
+```
+
+Alternatively, you can copy the [`us`](./us) file directly to `/usr/share/X11/xkb/symbols/`
+
+```bash
+sudo cp us /usr/share/X11/xkb/symbols/
+```
+
 ## Layer Overview
 
 | Layer | Purpose |
