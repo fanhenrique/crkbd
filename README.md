@@ -50,11 +50,9 @@ sudo cp us /usr/share/X11/xkb/symbols/
 |-------|---------|
 | **TEXT** | Default QWERTY layout |
 | **OS** | OS-level shortcuts with GUI modifier |
-| **NAVIGATE** | Arrow keys, Home/End, Ctrl+Backspace/Delete |
-| **SHORTCUT** | Ctrl+key combinations (copy, paste, undo, etc.) |
-| **NUMBERS_AND_MATH** | Number row + math operators |
-| **SYMBOLS** | Special characters and brackets |
-| **FUNCTIONS_AND_NUMPAD** | Function keys (F1-F12) + numpad |
+| **NAVIGATE** | Arrow keys, Home/End |
+| **NUMBERS_SYMBOLS** | Number row + Special characters |
+| **FUNCTIONS_NUMPAD** | Function keys (F1-F12) + numpad |
 | **SPECIAL** | Bootloader, reboot, RGB controls |
 
 ## Install Dependencies
