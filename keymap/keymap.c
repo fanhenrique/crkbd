@@ -104,9 +104,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [TEXT] = LAYOUT_split_3x6_3_ex2(
     //----------------------------------------------------------------    ----------------------------------------------------------------
-        KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_GRV,       KC_CIRC,   KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,
+        KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_GRV,      KC_TILD,   KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,
     //----------------------------------------------------------------    ----------------------------------------------------------------
-        KC_TAB,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_TILD,     KC_ACUTE,  KC_H,  KC_J,  KC_K,  KC_L,TD(TD_DQUO_QUOT), KC_DEL,
+        KC_TAB,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_CIRC,     KC_ACUTE,  KC_H,  KC_J,  KC_K,  KC_L,TD(TD_DQUO_QUOT), KC_DEL,
     //----------------------------------------------------------------    ----------------------------------------------------------------
     TD(TD_LSFT_CAPS),LT(FUNCTIONS_NUMPAD,KC_Z), KC_X, KC_C, KC_V, KC_B,         KC_N,  KC_M, KC_COMM, KC_DOT,TD(TD_SLSH_QUES),MO(SPECIAL),
     //----------------------------------------------------------------    ----------------------------------------------------------------
@@ -115,11 +115,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [OS] = LAYOUT_split_3x6_3_ex2(
     //----------------------------------------------------------------    ----------------------------------------------------------------
-        XXXXXXX,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, KC_VOLU,      KC_MICU,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, XXXXXXX,
+        XXXXXXX,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLU,      KC_MICU,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, XXXXXXX,
     //----------------------------------------------------------------    ----------------------------------------------------------------
         XXXXXXX,    KC_A,    KC_S,    KC_D,    KC_F, KC_MUTE, KC_VOLD,      KC_MICD, KC_MICM, KC_LALT, KC_LSFT, KC_LCTL, KC_DQUO, XXXXXXX,
     //----------------------------------------------------------------    ----------------------------------------------------------------
         XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                           KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
+    //----------------------------------------------------------------    ----------------------------------------------------------------
+                                        XXXXXXX, XXXXXXX, KC_SPC,           KC_ENT, MO(NAVIGATE), XXXXXXX
+    ),
+
+    [I3] = LAYOUT_split_3x6_3_ex2(
+    //----------------------------------------------------------------    ----------------------------------------------------------------
+        XXXXXXX,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, XXXXXXX,      XXXXXXX,   KC_Y,    KC_U,    KC_I,    KC_O,   KC_P, XXXXXXX,
+    //----------------------------------------------------------------    ----------------------------------------------------------------
+        XXXXXXX,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, XXXXXXX,      XXXXXXX,   KC_H,    KC_J,    KC_K,    KC_L, KC_DQUO, XXXXXXX,
+    //----------------------------------------------------------------    ----------------------------------------------------------------
+        XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                          KC_N,    KC_M,  KC_COMM, KC_DOT, KC_SLSH, XXXXXXX,
     //----------------------------------------------------------------    ----------------------------------------------------------------
                                         XXXXXXX, XXXXXXX, KC_SPC,           KC_ENT, MO(NAVIGATE), XXXXXXX
     ),
