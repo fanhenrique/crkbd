@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum {
     TEXT,
     I3,
-    I3_APPS,
     NAVIGATE,
     NUMBERS_SYMBOLS,
     FUNCTIONS_NUMPAD,
@@ -34,7 +33,7 @@ enum combo_events {
     COMBO_SEMICOLON,
 };
 
-// // ### Custom keys ###
+// ### Custom keys ###
 enum custom_keycodes {
     KC_CCED = SAFE_RANGE,
     KC_ACUTE,
@@ -121,18 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //----------------------------------------------------------------    ----------------------------------------------------------------
         KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                           KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
     //----------------------------------------------------------------    ----------------------------------------------------------------
-                                        XXXXXXX, XXXXXXX, KC_SPC,           LT(I3_APPS, KC_ENT), MO(NAVIGATE), XXXXXXX
-    ),
-
-    [I3_APPS] = LAYOUT_split_3x6_3_ex2(
-    //----------------------------------------------------------------    ----------------------------------------------------------------
-        XXXXXXX,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, XXXXXXX,      XXXXXXX,   KC_Y,    KC_U,    KC_I,    KC_O,   KC_P, XXXXXXX,
-    //----------------------------------------------------------------    ----------------------------------------------------------------
-        XXXXXXX,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, XXXXXXX,      XXXXXXX,   KC_H,    KC_J,    KC_K,    KC_L, KC_DQUO, XXXXXXX,
-    //----------------------------------------------------------------    ----------------------------------------------------------------
-        XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                          KC_N,    KC_M,  KC_COMM, KC_DOT, KC_SLSH, XXXXXXX,
-    //----------------------------------------------------------------    ----------------------------------------------------------------
-                                        XXXXXXX, XXXXXXX, KC_SPC,           KC_ENT, XXXXXXX, XXXXXXX
+                                        XXXXXXX, XXXXXXX, KC_SPC,           KC_ENT, MO(NAVIGATE), XXXXXXX
     ),
 
     [NAVIGATE] = LAYOUT_split_3x6_3_ex2(
@@ -184,7 +172,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
   [TEXT] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
   [I3] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
-  [I3_APPS] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
   [NAVIGATE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
   [NUMBERS_SYMBOLS] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
   [FUNCTIONS_NUMPAD] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
