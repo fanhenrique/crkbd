@@ -33,6 +33,17 @@ static const char *layer_names[] = {
 #define LAYER_COUNT (sizeof(layer_names) / sizeof(layer_names[0]))
 
 
+static void print_layer_name(const char *name)
+{
+    const int width = 15;
+    const int length = strlen(name);
+
+    int left = (width - length) / 2;
+    int right = width - length - left;
+
+    printf("%*s%s%*s\n", left, "", name, right, "");
+}
+
 static const char *find_hidraw(void)
 {
     static char device_path[PATH_MAX];
@@ -149,7 +160,7 @@ int main(void)
 
         last_layer = layer;
 
-        printf("%s\n", layer_names[layer]);
+        print_layer_name(layer_names[layer]);
         fflush(stdout);
     }
 
