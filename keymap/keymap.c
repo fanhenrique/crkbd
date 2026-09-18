@@ -51,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //----------------------------------------------------------------    ----------------------------------------------------------------
         KC_TAB, XXXXXXX, XXXXXXX,    KC_D,    KC_F, KC_MUTE, KC_VOLD,       KC_MICD, KC_MICM, KC_LCTL, KC_LSFT, KC_LALT, XXXXXXX, XXXXXXX,
     //----------------------------------------------------------------    ----------------------------------------------------------------
-       KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,XXXXXXX,XXXXXXX,TD(TDL_MOUSE),TD(TDL_FUNCTIONS_NUMPAD),TD(TDL_SPECIAL),
+       KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_B, XXXXXXX, XXXXXXX,XXXXXXX,TD(TDL_MOUSE),TD(TDL_FUNCTIONS_NUMPAD),TD(TDL_SPECIAL),
     //----------------------------------------------------------------    ----------------------------------------------------------------
                                              KC_LCTL, XXXXXXX, KC_SPC,      KC_ENT, TD(TDL_NAVIGATE), MO(OPERATIONS)
     ),
