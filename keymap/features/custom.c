@@ -7,7 +7,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_CCED:
             if (!record->event.pressed){
                 tap_code16(RALT(KC_COMM));
-                tap_code(KC_C);
             }
             return false;
             
